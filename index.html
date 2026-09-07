@@ -6,16 +6,16 @@
     <title>Gửi em...</title>
     <style>
         :root {
-            --bg-color: #fff0f3; /* Nền màu hồng nhạt pastel */
-            --text-color: #590d22; /* Chữ màu đỏ đô */
-            --accent-color: #ff4d6d; /* Nút bấm màu hồng đỏ */
-            --overlay-color: rgba(255, 240, 243, 0.88); /* Lớp lọc màu hồng che lên ảnh nền (88% độ đậm) */
+            --bg-gradient-1: #ffe5ec;
+            --bg-gradient-2: #ffc2d1;
+            --text-color: #590d22; 
+            --accent-color: #ff4d6d; 
+            --overlay-color: rgba(255, 255, 255, 0.85); /* Lớp phủ mờ đè lên ảnh nền từng trang */
         }
         
         body {
             margin: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
             color: var(--text-color);
             display: flex;
             justify-content: center;
@@ -23,88 +23,139 @@
             min-height: 100vh;
             padding: 20px;
             box-sizing: border-box;
+            background: linear-gradient(135deg, var(--bg-gradient-1), var(--bg-gradient-2));
+            overflow-x: hidden;
         }
 
-        /* Khung chứa chung cho tất cả các trang */
+        /* --- HIỆU ỨNG TRÁI TIM BAY NỀN NGOÀI --- */
+        .bg-hearts {
+            position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1; pointer-events: none; overflow: hidden;
+        }
+        .bg-hearts span {
+            position: absolute; display: block; width: 25px; height: 25px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="%23ff758f"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>') no-repeat center/contain;
+            animation: floatUp 15s linear infinite; bottom: -50px; opacity: 0.4;
+        }
+        .bg-hearts span:nth-child(1) { left: 10%; animation-duration: 12s; width: 30px; height: 30px; }
+        .bg-hearts span:nth-child(2) { left: 30%; animation-duration: 18s; animation-delay: 2s; }
+        .bg-hearts span:nth-child(3) { left: 50%; animation-duration: 15s; width: 20px; height: 20px; animation-delay: 5s; }
+        .bg-hearts span:nth-child(4) { left: 70%; animation-duration: 14s; animation-delay: 1s; width: 35px; height: 35px; }
+        .bg-hearts span:nth-child(5) { left: 90%; animation-duration: 16s; animation-delay: 3s; }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Khung chứa chung */
         .wrapper {
             max-width: 450px;
             width: 100%;
+            z-index: 1;
         }
 
         /* Định dạng cho từng trang (page) */
         .page {
-            background-color: #ffffff;
+            /* Hiệu ứng kính mờ (Glassmorphism) */
+            background-color: rgba(255, 255, 255, 0.75);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            
             padding: 40px 25px;
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.15);
+            box-shadow: 0 15px 35px rgba(255, 77, 109, 0.2);
             text-align: center;
-            display: none; /* Ẩn tất cả các trang đi */
+            display: none; 
             
-            /* Thiết lập để chèn ảnh nền */
+            /* Để chèn ảnh nền riêng cho từng phần */
             background-size: cover;
             background-position: center;
         }
 
-        /* Trang nào có class 'active' thì sẽ hiện ra kèm hiệu ứng mượt mà */
         .page.active {
             display: block;
             animation: fadeIn 0.8s ease-in-out forwards;
         }
 
-        /* --- CÀI ĐẶT ẢNH NỀN CHO TỪNG TRANG CHÍNH --- */
-        #page-1 {
-            /* Thay link ảnh 1 của bạn vào đây */
-            background-image: linear-gradient(var(--overlay-color), var(--overlay-color)), url('anh-1.jpg');
+        /* --- ẢNH NỀN BÊN TRONG CHO TỪNG TRANG CHÍNH --- */
+        #page-1 { background-image: linear-gradient(var(--overlay-color), var(--overlay-color)), url('anh-1.jpg'); }
+        #page-2 { background-image: linear-gradient(var(--overlay-color), var(--overlay-color)), url('anh-2.jpg'); }
+        #page-3 { background-image: linear-gradient(var(--overlay-color), var(--overlay-color)), url('anh-3.jpg'); }
+
+        /* --- GIAO DIỆN FORM ĐĂNG NHẬP --- */
+        .heart-icon { font-size: 45px; margin-bottom: 5px; animation: pulse 1.5s infinite; }
+        .login-title { margin-top: 0; margin-bottom: 25px; font-size: 24px; }
+        
+        .form-group {
+            text-align: left;
+            width: 90%;
+            margin: 0 auto 18px auto;
         }
-        #page-2 {
-            /* Thay link ảnh 2 của bạn vào đây */
-            background-image: linear-gradient(var(--overlay-color), var(--overlay-color)), url('anh-2.jpg');
+        .form-group label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: #800f2f;
+            margin-bottom: 6px;
         }
-        #page-3 {
-            /* Thay link ảnh 3 của bạn vào đây */
-            background-image: linear-gradient(var(--overlay-color), var(--overlay-color)), url('anh-3.jpg');
+        .form-group .hint {
+            display: block;
+            font-size: 12px;
+            font-weight: normal;
+            color: #888;
+            margin-top: 4px;
+            font-style: italic;
         }
+        .form-group input {
+            width: 100%;
+            box-sizing: border-box;
+            padding: 12px 15px;
+            border: 2px solid #ffb3c1;
+            border-radius: 12px;
+            outline: none;
+            font-size: 15px;
+            color: var(--text-color);
+            background-color: rgba(255, 255, 255, 0.9);
+            transition: all 0.3s ease;
+        }
+        .form-group input:focus { 
+            border-color: var(--accent-color); 
+            box-shadow: 0 0 8px rgba(255, 77, 109, 0.3);
+        }
+
+        .error-msg { color: #c9184a; font-size: 14px; margin-top: 15px; display: none; font-weight: 500;}
 
         /* --- CÁC THÀNH PHẦN BÊN TRONG --- */
-        .heart-icon { font-size: 40px; margin-bottom: 10px; animation: pulse 1.5s infinite; }
-        
-        input[type="password"] {
-            width: 85%; padding: 12px; margin: 20px 0;
-            border: 2px solid #ffb3c1; border-radius: 10px;
-            outline: none; text-align: center; font-size: 16px; color: var(--text-color);
-        }
-        input[type="password"]:focus { border-color: var(--accent-color); }
-
-        .error-msg { color: #c9184a; font-size: 14px; margin-top: 15px; display: none; }
-
         .opening { font-size: 17px; font-style: italic; line-height: 1.7; color: #800f2f; }
         .apology { font-size: 16px; line-height: 1.7; text-align: left; }
         
         .video-container {
             position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
-            border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); margin-top: 15px;
         }
         .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
 
         /* --- NÚT BẤM ĐIỀU HƯỚNG --- */
-        .nav-buttons {
-            display: flex; justify-content: center; gap: 15px; margin-top: 30px;
-        }
+        .nav-buttons { display: flex; justify-content: center; gap: 15px; margin-top: 30px; }
         button {
             background-color: var(--accent-color); color: white; border: none;
-            padding: 10px 25px; border-radius: 25px; font-size: 15px; font-weight: bold;
+            padding: 12px 28px; border-radius: 25px; font-size: 15px; font-weight: bold;
             cursor: pointer; transition: background 0.3s, transform 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3);
         }
         button:hover { background-color: #c9184a; transform: translateY(-2px); }
         button.btn-outline {
-            background-color: transparent; color: var(--text-color); border: 1px solid var(--text-color);
+            background-color: transparent; color: var(--text-color); 
+            border: 1px solid var(--text-color); box-shadow: none;
         }
         button.btn-outline:hover { background-color: rgba(255, 77, 109, 0.1); }
 
         /* --- HIỆU ỨNG --- */
         @keyframes fadeIn {
-            from { opacity: 0; transform: scale(0.98); }
-            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: scale(0.98) translateY(10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
         @keyframes pulse {
             0% { transform: scale(1); }
@@ -115,27 +166,40 @@
 </head>
 <body>
 
+    <!-- TRÁI TIM BAY Ở NỀN -->
+    <div class="bg-hearts">
+        <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
     <div class="wrapper">
         
         <!-- TRANG 0: MÀN HÌNH KHÓA -->
         <div class="page active" id="page-0">
             <div class="heart-icon">❤️</div>
-            <h2>Chào em</h2>
-            <p>Để mở bức thư này, em hãy nhập mật khẩu nhé.</p>
-            <p style="font-size: 13px; color: #a5a5a5;">(Gợi ý: Ngày đầu tiên mình hẹn hò - VD: 01012024)</p>
+            <h2 class="login-title">Chào em</h2>
             
-            <input type="password" id="passwordInput" placeholder="Nhập mật khẩu...">
-            <br>
-            <button onclick="checkPassword()">Mở Khóa</button>
-            <p class="error-msg" id="errorMsg">Mật khẩu chưa đúng, em thử lại nhé!</p>
+            <div class="form-group">
+                <label>Tên tài khoản <span class="hint">(Gợi ý: Mật khẩu điện thoại của em<3)</span></label>
+                <input type="text" id="usernameInput" placeholder="VD: 123456">
+            </div>
+
+            <div class="form-group">
+                <label>Mật khẩu <span class="hint">(Gợi ý: Ngày kỷ niệm của chúng mình - VD: 01012024)</span></label>
+                <input type="password" id="passwordInput" placeholder="Nhập mật khẩu...">
+            </div>
+            
+            <button style="margin-top: 10px;" onclick="checkPassword()">Mở Khóa</button>
+            <p class="error-msg" id="errorMsg">Thông tin chưa đúng, em thử lại nhé!</p>
         </div>
 
         <!-- TRANG 1: LỜI MỞ ĐẦU -->
         <div class="page" id="page-1">
             <div class="opening">
-                <p>"Gửi em...</p>
+                <p>Gửi em...</p>
                 <p>Anh biết lúc này em không muốn nghe anh nói, nên anh mạn phép dùng cách này để lưu lại vài điều...</p>
-                <p>Chỉ mất của em vài phút thôi."</p>
+                <p>Chỉ mất của em vài phút thôi.</p>
+                <p>Có lẽ đây là bó hoa đầu tiên anh tặng em(nếu không tính hoa bánh kẹo), anh định đến ngày 20/10 hay ngày sinh nhật em để lại được cùng em thổi nến, nhưng anh sợ sẽ không còn cơ hội làm điều đó nữa...</p
+                <p>Có câu nói rằng: <i>"Trước khi buông tay, hãy nhớ lại lý do mình từng bắt đầu"</i>. Trước khi em đưa ra quyết định cuối cùng, cho phép anh cùng em xem lại những kỷ niệm mình đã có. Dù sau này thế nào, anh cũng mong em sẽ xem hết đoạn phim này.</p>
             </div>
             <div class="nav-buttons">
                 <button onclick="showPage('page-2')">Đọc tiếp ➔</button>
@@ -144,10 +208,10 @@
 
         <!-- TRANG 2: VIDEO KỶ NIỆM -->
         <div class="page" id="page-2">
-            <h3 style="margin-top: 0;">Kỷ niệm của chúng mình</h3>
+            <h3 style="margin-top: 0; margin-bottom: 5px;">Kỷ niệm của chúng mình</h3>
             <div class="video-container">
-                <!-- Xóa link youtube mẫu bên dưới và dán link nhúng video của bạn vào -->
-                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+                <!-- Dán link nhúng video của bạn vào src -->
+                <iframe src="https://www.youtube.com/embed/CNbc5_hTGeI?si=z-ygPqvUWXmEthCZ" allowfullscreen></iframe>
             </div>
             <div class="nav-buttons">
                 <button class="btn-outline" onclick="showPage('page-1')">⬅ Quay lại</button>
@@ -158,9 +222,15 @@
         <!-- TRANG 3: LỜI XIN LỖI -->
         <div class="page" id="page-3">
             <div class="apology">
-                <p>Anh đã suy nghĩ rất nhiều về khoảng thời gian qua. Anh nhận ra những thiếu sót của mình đã làm em buồn và mệt mỏi thế nào.</p>
-                <p>Trang web nhỏ này không phải để nài nỉ hay ép em phải thay đổi quyết định ngay. Anh chỉ muốn gửi đến em một lời xin lỗi chân thành nhất và muốn em biết rằng, anh trân trọng mọi thứ thuộc về chúng ta.</p>
-                <p>Xin lỗi em vì tất cả. Chúc em một ngày bình yên.</p>
+                <p>Cho anh tâm sự xíu nhé. Anh là 1 người khá ít bộc lộ cảm xúc bên ngoài, luôn muốn che dấu cảm xúc của mình để trở nên mạnh mẽ hơn, để có thể che chở và bảo vệ người mà mình thương. Trong tình yêu cũng vậy, nhất là những lúc cãi nhau, anh luôn muốn im lặng. Lúc đó, anh ngốc nghếch nghĩ rằng im lặng sẽ ngăn cuộc cãi vã lớn hơn, sẽ bảo vệ được tình yêu của mình và không làm em bị tổn thương thêm. Nhưng anh sai rồi. Chính sự im lặng ấy lại là thứ vô tình đẩy em ra xa và làm em buồn phiền nhiều nhất. Mỗi lần nhìn em khóc, anh thực sự đau lòng lắm. Anh xin lỗi vì cách giải quyết vấn đề của mình đã khiến em mệt mỏi.</p>
+                
+                <p>Trước khi có em, cuộc sống anh cũng nhàm chán lắm, quanh quẩn chỉ có mấy đứa bạn rồi học tập. Nhưng khi có em cuộc sống của anh nhiều sắc màu lắm, em luôn động viên anh khiến anh có động lực cố gắng hơn. Ngoài ra, khi có em đến, anh được trải nghiệm nhiều thứ hơn, được đi chơi nhiều hơn đặc biệt là với người yêu mình nữa thì còn gì tuyệt hơn.</p>
+                
+                <p>Anh vẫn luôn yêu em, trân trọng từng phút giây mình ở bên nhau, anh luôn tìm cách giải quyết vấn đề, rào cản đối với tình yêu của chúng mình mà chưa bao giờ có ý định từ bỏ. Nhớ hồi Tết, em bảo em rất áp lực khi họ hàng và gia đình phản đối việc yêu xa vì mẹ em ở có 1 mình. Anh biết và hiểu nên anh đã có ý định chuyển lên làm việc ở Bắc Ninh để sau này thuận tiện hơn. Chính vì vậy mà anh chọn Samsung để đi thực tập và cũng có ý định rủ em vì môi trường ở đó rất tốt để chúng mình phát triển. Bên ngoài anh nhìn vô lo vô nghĩ như vậy chứ thực ra anh luôn tính toán phương án tốt nhất cho chuyện tình của mình mà... Anh không phải kể công hay gì đâu tại anh muốn cho em thấy thực sự anh vẫn rất yêu em, vẫn luôn muốn chúng mình có thể đi xa hơn nữa và trong mọi dự định tương lai của anh đều luôn có em ở trong đó...</p>
+                
+                <p>Khi ngồi edit video và code web này thì thật sự anh đã khóc rất nhiều, nhìn lại những chuyến đi chơi, những lúc mình vui vẻ bên nhau mà anh không thể cầm được nước mắt. Anh ước có thể quay lại khoảng thời gian đó, để anh được sửa sai, bù đắp cho em. Đặc biệt anh sợ ngày mai em vẫn giữ quyết định như vậy, vẫn lựa chọn rời xa anh... Anh biết em vẫn còn yêu anh mà đúng không...</p>
+                
+                <p>Trang web nhỏ này anh tạo ra không phải để tạo áp lực hay bắt em phải tha thứ ngay lập tức. Anh chỉ mong nếu những kỷ niệm, những vui buồn mình đã trải qua cùng nhau đủ để em mủi lòng và muốn cho tình yêu này thêm 1 cơ hội cuối cùng nữa, thì anh vẫn luôn ở đây. Anh sẽ sửa chữa những sai lầm và sẽ không bao giờ để em phải thất vọng nữa. Nếu có thể thì hãy cho anh được yêu và quan tâm em nhé! Cảm ơn em vì thanh xuân này đã đến bên anh...</p>
             </div>
             <div class="nav-buttons">
                 <button class="btn-outline" onclick="showPage('page-2')">⬅ Quay lại</button>
@@ -170,36 +240,64 @@
     </div>
 
     <script>
-        // MẬT KHẨU CỦA BẠN (Sửa ở đây)
+        // TÙY CHỈNH TÀI KHOẢN VÀ MẬT KHẨU TẠI ĐÂY
+        // Chú ý: Tên tài khoản nên viết thường (hệ thống sẽ tự động chuyển chữ hoa thành chữ thường khi so sánh)
+        const correctUsername = '030404'; 
         const correctPassword = '24042024'; 
 
-        // Hàm kiểm tra mật khẩu
+        // KIỂM TRA TRẠNG THÁI KHI VỪA VÀO TRANG (Chống lỗi tải lại trang)
+        window.onload = function() {
+            // Nếu đã từng mở khóa thành công trong phiên này
+            if (sessionStorage.getItem('isUnlocked') === 'true') {
+                // Lấy lại trang đang xem dở, nếu không có thì mặc định vào trang 1
+                const savedPage = sessionStorage.getItem('currentPage') || 'page-1';
+                showPage(savedPage, false); // Tham số false để không chạy lại animation mờ ảo khi F5
+            }
+        };
+
+        // HÀM KIỂM TRA MẬT KHẨU
         function checkPassword() {
-            const input = document.getElementById('passwordInput').value.trim();
-            if (input === correctPassword) {
-                showPage('page-1'); // Đổi từ trang 0 sang trang 1
+            // Lấy dữ liệu và tự động chuyển tên đăng nhập về chữ thường để tránh lỗi gõ nhầm CapsLock
+            const user = document.getElementById('usernameInput').value.trim().toLowerCase();
+            const pass = document.getElementById('passwordInput').value.trim();
+
+            if (user === correctUsername && pass === correctPassword) {
+                // Lưu trạng thái đã mở khóa vào bộ nhớ tạm của trình duyệt
+                sessionStorage.setItem('isUnlocked', 'true');
+                showPage('page-1'); 
             } else {
                 document.getElementById('errorMsg').style.display = 'block';
             }
         }
 
-        // Hỗ trợ nhấn Enter để mở khóa
+        // HỖ TRỢ NHẤN PHÍM ENTER ĐỂ ĐĂNG NHẬP
         document.getElementById("passwordInput").addEventListener("keypress", function(event) {
             if (event.key === "Enter") {
                 event.preventDefault();
                 checkPassword();
             }
         });
+        document.getElementById("usernameInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                document.getElementById("passwordInput").focus(); // Chuyển con trỏ xuống ô mật khẩu
+            }
+        });
 
-        // Hàm chuyển trang mượt mà
-        function showPage(pageId) {
-            // Ẩn tất cả các trang
+        // HÀM CHUYỂN TRANG MƯỢT MÀ VÀ LƯU LẠI VỊ TRÍ
+        function showPage(pageId, animate = true) {
             const pages = document.querySelectorAll('.page');
             pages.forEach(page => {
                 page.classList.remove('active');
+                if (!animate) page.style.animation = 'none'; // Tắt hiệu ứng nếu chỉ đang tải lại trang
             });
-            // Hiển thị trang được gọi
-            document.getElementById(pageId).classList.add('active');
+            
+            const targetPage = document.getElementById(pageId);
+            targetPage.classList.add('active');
+            if (!animate) targetPage.style.animation = 'none';
+
+            // Lưu lại ID của trang hiện tại để F5 không bị mất
+            sessionStorage.setItem('currentPage', pageId);
         }
     </script>
 
