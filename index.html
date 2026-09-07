@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gửi em...</title>
+    <style>
+        :root {
+            --bg-color: #fff0f3; /* Nền màu hồng nhạt pastel */
+            --text-color: #590d22; /* Chữ màu đỏ đô */
+            --accent-color: #ff4d6d; /* Nút bấm màu hồng đỏ */
+            --overlay-color: rgba(255, 240, 243, 0.88); /* Lớp lọc màu hồng che lên ảnh nền (88% độ đậm) */
+        }
+        
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        /* Khung chứa chung cho tất cả các trang */
+        .wrapper {
+            max-width: 450px;
+            width: 100%;
+        }
+
+        /* Định dạng cho từng trang (page) */
+        .page {
+            background-color: #ffffff;
+            padding: 40px 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(255, 77, 109, 0.15);
+            text-align: center;
+            display: none; /* Ẩn tất cả các trang đi */
+            
+            /* Thiết lập để chèn ảnh nền */
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Trang nào có class 'active' thì sẽ hiện ra kèm hiệu ứng mượt mà */
+        .page.active {
+            display: block;
+            animation: fadeIn 0.8s ease-in-out forwards;
+        }
+
+        /* --- CÀI ĐẶT ẢNH NỀN CHO TỪNG TRANG CHÍNH --- */
+        #page-1 {
+            /* Thay link ảnh 1 của bạn vào đây */
+            background-image: linear-gradient(var(--overlay-color), var(--overlay-color)), url('anh-1.jpg');
+        }
+        #page-2 {
+            /* Thay link ảnh 2 của bạn vào đây */
+            background-image: linear-gradient(var(--overlay-color), var(--overlay-color)), url('anh-2.jpg');
+        }
+        #page-3 {
+            /* Thay link ảnh 3 của bạn vào đây */
+            background-image: linear-gradient(var(--overlay-color), var(--overlay-color)), url('anh-3.jpg');
+        }
+
+        /* --- CÁC THÀNH PHẦN BÊN TRONG --- */
+        .heart-icon { font-size: 40px; margin-bottom: 10px; animation: pulse 1.5s infinite; }
+        
+        input[type="password"] {
+            width: 85%; padding: 12px; margin: 20px 0;
+            border: 2px solid #ffb3c1; border-radius: 10px;
+            outline: none; text-align: center; font-size: 16px; color: var(--text-color);
+        }
+        input[type="password"]:focus { border-color: var(--accent-color); }
+
+        .error-msg { color: #c9184a; font-size: 14px; margin-top: 15px; display: none; }
+
+        .opening { font-size: 17px; font-style: italic; line-height: 1.7; color: #800f2f; }
+        .apology { font-size: 16px; line-height: 1.7; text-align: left; }
+        
+        .video-container {
+            position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+            border-radius: 12px; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .video-container iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+
+        /* --- NÚT BẤM ĐIỀU HƯỚNG --- */
+        .nav-buttons {
+            display: flex; justify-content: center; gap: 15px; margin-top: 30px;
+        }
+        button {
+            background-color: var(--accent-color); color: white; border: none;
+            padding: 10px 25px; border-radius: 25px; font-size: 15px; font-weight: bold;
+            cursor: pointer; transition: background 0.3s, transform 0.2s;
+        }
+        button:hover { background-color: #c9184a; transform: translateY(-2px); }
+        button.btn-outline {
+            background-color: transparent; color: var(--text-color); border: 1px solid var(--text-color);
+        }
+        button.btn-outline:hover { background-color: rgba(255, 77, 109, 0.1); }
+
+        /* --- HIỆU ỨNG --- */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.98); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="wrapper">
+        
+        <!-- TRANG 0: MÀN HÌNH KHÓA -->
+        <div class="page active" id="page-0">
+            <div class="heart-icon">❤️</div>
+            <h2>Chào em</h2>
+            <p>Để mở bức thư này, em hãy nhập mật khẩu nhé.</p>
+            <p style="font-size: 13px; color: #a5a5a5;">(Gợi ý: Ngày đầu tiên mình hẹn hò - VD: 01012024)</p>
+            
+            <input type="password" id="passwordInput" placeholder="Nhập mật khẩu...">
+            <br>
+            <button onclick="checkPassword()">Mở Khóa</button>
+            <p class="error-msg" id="errorMsg">Mật khẩu chưa đúng, em thử lại nhé!</p>
+        </div>
+
+        <!-- TRANG 1: LỜI MỞ ĐẦU -->
+        <div class="page" id="page-1">
+            <div class="opening">
+                <p>"Gửi em...</p>
+                <p>Anh biết lúc này em không muốn nghe anh nói, nên anh mạn phép dùng cách này để lưu lại vài điều...</p>
+                <p>Chỉ mất của em vài phút thôi."</p>
+            </div>
+            <div class="nav-buttons">
+                <button onclick="showPage('page-2')">Đọc tiếp ➔</button>
+            </div>
+        </div>
+
+        <!-- TRANG 2: VIDEO KỶ NIỆM -->
+        <div class="page" id="page-2">
+            <h3 style="margin-top: 0;">Kỷ niệm của chúng mình</h3>
+            <div class="video-container">
+                <!-- Xóa link youtube mẫu bên dưới và dán link nhúng video của bạn vào -->
+                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn-outline" onclick="showPage('page-1')">⬅ Quay lại</button>
+                <button onclick="showPage('page-3')">Đọc tiếp ➔</button>
+            </div>
+        </div>
+
+        <!-- TRANG 3: LỜI XIN LỖI -->
+        <div class="page" id="page-3">
+            <div class="apology">
+                <p>Anh đã suy nghĩ rất nhiều về khoảng thời gian qua. Anh nhận ra những thiếu sót của mình đã làm em buồn và mệt mỏi thế nào.</p>
+                <p>Trang web nhỏ này không phải để nài nỉ hay ép em phải thay đổi quyết định ngay. Anh chỉ muốn gửi đến em một lời xin lỗi chân thành nhất và muốn em biết rằng, anh trân trọng mọi thứ thuộc về chúng ta.</p>
+                <p>Xin lỗi em vì tất cả. Chúc em một ngày bình yên.</p>
+            </div>
+            <div class="nav-buttons">
+                <button class="btn-outline" onclick="showPage('page-2')">⬅ Quay lại</button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        // MẬT KHẨU CỦA BẠN (Sửa ở đây)
+        const correctPassword = '24042024'; 
+
+        // Hàm kiểm tra mật khẩu
+        function checkPassword() {
+            const input = document.getElementById('passwordInput').value.trim();
+            if (input === correctPassword) {
+                showPage('page-1'); // Đổi từ trang 0 sang trang 1
+            } else {
+                document.getElementById('errorMsg').style.display = 'block';
+            }
+        }
+
+        // Hỗ trợ nhấn Enter để mở khóa
+        document.getElementById("passwordInput").addEventListener("keypress", function(event) {
+            if (event.key === "Enter") {
+                event.preventDefault();
+                checkPassword();
+            }
+        });
+
+        // Hàm chuyển trang mượt mà
+        function showPage(pageId) {
+            // Ẩn tất cả các trang
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            // Hiển thị trang được gọi
+            document.getElementById(pageId).classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
